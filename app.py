@@ -6,7 +6,7 @@ import scrape_mars
 # create instance of Flask app
 app = Flask(__name__)
 
-
+app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
 mongo = PyMongo(app)
 
 #  create route that renders index.html template
@@ -14,6 +14,12 @@ mongo = PyMongo(app)
 def index():
     mars = mongo.db.mars.find_one()
     return render_template("index.html", mars=mars)
+
+#@app.route("/")
+#def home_page():
+#    online_users = mongo.db.users.find({"online": True})
+#    return render_template("index.html",
+#        online_users=online_users)
 
 
 @app.route("/scrape")
