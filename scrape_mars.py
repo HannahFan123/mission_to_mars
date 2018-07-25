@@ -10,6 +10,7 @@ from splinter import Browser
 from splinter.exceptions import ElementDoesNotExist
 from bs4 import BeautifulSoup
 import time
+import os
 import pandas as pd
 import requests
 
@@ -17,12 +18,9 @@ import requests
 # In[3]:
 
 def scrape():
-    
+
     executable_path = {'executable_path': 'chromedriver.exe'}
     browser = Browser('chrome', **executable_path, headless=False)
-
-
-    
 
 # # NASA Mars News
 
@@ -147,8 +145,8 @@ def scrape():
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     mars_dicts = []
 
-    for i in range(1,9,2):
-        mars_dict = {}
+
+    for i in range(1, 9, 2):
         hemi_dict = {}
     
         browser.visit(url)
@@ -182,14 +180,17 @@ def scrape():
 
         mars_dicts.append({"Title": title, "Image_Url": img_url})
 
-
         #print(mars_dicts)
-        print(hemi_dict)
 
     browser.quit()
 
-    
-    mars_data = {}
+    mars_data = {
+        "news_title": news_title,
+        "news_p": news_p,
+        "img_url": img_url,
+        "mars_weather": mars_weather, 
+        "mars_table": mars_data_html,
+        "mars_dicts": mars_dicts}
 
-    mars_data = {"News Title": news_title, "News Paragraph": news_p, "Featured Image": img_url, "Mars Weather": mars_weather, "Mars Data": mars_data_html, "Mars Images": hemi_dict}
+    return mars_data
 
