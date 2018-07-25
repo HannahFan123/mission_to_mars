@@ -20,7 +20,7 @@ def scrape():
     
     executable_path = {'executable_path': 'chromedriver.exe'}
     browser = Browser('chrome', **executable_path, headless=False)
-    time.sleep(1)
+
 
     
 
@@ -34,7 +34,9 @@ def scrape():
 
     url = "https://mars.nasa.gov/news/"
     browser.visit(url)
+    time.sleep(1)
     html = browser.html
+    time.sleep(2)
     soup = BeautifulSoup(html, 'html.parser')
     article = soup.find("div", class_="list_text")
     news_p = article.find("div", class_="article_teaser_body").text
@@ -56,10 +58,12 @@ def scrape():
 
     url = "https://jpl.nasa.gov/spaceimages/?search=&category=Mars"
     browser.visit(url)
+    time.sleep(1)
 
 # Scrape the browser into soup and use soup to find the image of mars
 # Save the image url to a variable called `img_url`
     html = browser.html
+    time.sleep(1)
     soup = BeautifulSoup(html, 'html.parser')
     image = soup.find("img", class_="thumb")["src"]
     #image = soup.find("article", class_="carousel_item")["style"]
@@ -85,7 +89,9 @@ def scrape():
 # visit the mars weather report twitter and scrape the latest tweet
     url = 'https://twitter.com/marswxreport?lang=en'
     browser.visit(url)
+    time.sleep(1)
     html = browser.html
+    time.sleep(1)
     mars_weather_soup = BeautifulSoup(html, 'html.parser')
 
     tweets = mars_weather_soup.find('ol', class_='stream-items')
@@ -146,18 +152,26 @@ def scrape():
         hemi_dict = {}
     
         browser.visit(url)
+        time.sleep(1)
         html = browser.html
+        time.sleep(1)
         soup = BeautifulSoup(html, 'html.parser')
         name_links = soup.find_all('a', class_='product-item')
         title = name_links[i].text.strip('Enhanced')
     
         detail_links = browser.find_by_css('a.product-item')
+        time.sleep(1)
         detail_links[i].click()
         browser.find_link_by_text('Sample').first.click()
+        time.sleep(1)
         browser.windows.current = browser.windows[-1]
+        time.sleep(1)
         img_html = browser.html
+        time.sleep(1)
         browser.windows.current = browser.windows[0]
+        time.sleep(1)
         browser.windows[-1].close()
+        time.sleep(1)
     
         img_soup = BeautifulSoup(img_html, 'html.parser')
         img_url = img_soup.find('img')['src']
@@ -174,10 +188,8 @@ def scrape():
 
     browser.quit()
 
-    return to_flask_dict
+    
+    mars_data = {}
 
-
-mars_data = {}
-
-mars_data = {"News Title": news_title, "News Paragraph": news_p, "Featured Image": img_url, "Mars Weather": mars_weather, "Mars Data": mars_data_html, "Mars Images": hemi_dict}
+    mars_data = {"News Title": news_title, "News Paragraph": news_p, "Featured Image": img_url, "Mars Weather": mars_weather, "Mars Data": mars_data_html, "Mars Images": hemi_dict}
 
